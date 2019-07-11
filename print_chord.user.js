@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         簡潔に！
 // @namespace    http://tampermonkey.net/
-// @version      0.1.0
+// @version      0.1.1
 // @description  下記のコード譜サイトの選択/コピー/右クリック/印刷の禁止を解除し印刷用に簡潔表示する
 // @description  Enable disabled select/copy/right-click/print and fomat the page for printing on some japanese sites.
 // @author       yobukodori
@@ -16,8 +16,15 @@ var opt_verbose; // = false;
 
 function hide_element(e)
 {
-	if (e != null && e["style"]){
+	if (e != null && e.style){
 		e.style.display="none";
+	}
+}
+
+function remove_element(e)
+{
+	if (e != null && e.parentNode != null){
+		e.parentNode.removeChild(e);
 	}
 }
 
@@ -27,6 +34,19 @@ function hide_elder(e)
 		while  (e = e.nextElementSibling){
 			console.log("hide elder " + e2str(e));
 			hide_element(e);
+		}
+	}
+}
+
+function remove_elder(e)
+{
+	if (e != null){
+		e = e.nextElementSibling;
+		while  (e){
+			var next = e.nextElementSibling;
+			console.log("remove elder " + e2str(e));
+			remove_element(e);
+			e = next;
 		}
 	}
 }
@@ -53,7 +73,7 @@ function insert_stylesheet(rules)
 
 var site_data = {
 	"music.j-total.net": {
-		"event": ["selectstart contextmenu"],
+		"event": ["selectstart contextmenu  scroll touchmove"],
 		"nonSelectable": [],
 		"PrintRules": [],
 		"formatPage": function(){
@@ -79,7 +99,7 @@ var site_data = {
 					for (var i = 0 ; i < e2move.length ; i++){
 						d.body.insertBefore(e2move[i], d.body.firstChild);
 					}
-					hide_elder(e2move[0]);
+					remove_elder(e2move[0]);
 					ee = chord_area.parentElement.querySelectorAll("table,tr,td");
 					for(i=0 ; i < ee.length ; i++){
 						e = ee[i];
@@ -102,7 +122,7 @@ var site_data = {
 		}
 	},
 	"gakufu.gakki.me": {
-		"event": ["selectstart copy keydown contextmenu"],
+		"event": ["selectstart copy keydown contextmenu  scroll touchmove"],
 		"nonSelectable": [],
 		"PrintRules": [],
 		"formatPage": function(){
@@ -125,7 +145,7 @@ var site_data = {
 				for (i = 0 ; i < e2move.length ; i++){
 					d.body.insertBefore(e2move[i], document.body.firstChild);
 				}
-				hide_elder(e2move[0]);
+				remove_elder(e2move[0]);
 				hide_element(d.querySelector("#divStayTopLeft"));
 			}
 			insert_stylesheet(
@@ -152,7 +172,7 @@ var site_data = {
 				window[fnc[i]] = function(){};
 			}
 		},
-		"event": ["selectstart copy contextmenu dragstart mousedown beforeprint afterprint"],
+		"event": ["selectstart copy contextmenu dragstart mousedown beforeprint afterprint scroll touchmove"],
 		"PrintRules": function(){
 			console.log("search '@media print' in styleSheets");
 			var ss = document.styleSheets;
@@ -187,10 +207,16 @@ var site_data = {
 			return [];
 		},
 		"formatPage": function(){
-			var chord, e, ee, i, e2move = [];
-			chord = document.querySelector('div[onclick="autoscroll()"]');
+			var d = document, chord, e, ee, i, e2move = [];
+			if (chord = d.querySelector('#original_box > div')){
+				if (e = chord.querySelector('#blyodnijb'))
+					chord = e;
+			}
+			else {
+				chord = d.querySelector('div[onclick="autoscroll()"]');
+			}
 			if (chord){
-				if (ee = document.querySelectorAll('div.card.card-body.bg-light.p-2 > p')){
+				if (ee = d.querySelectorAll('div.card.card-body.bg-light.p-2 > p')){
 					for (i = 0 ; i < ee.length ; i++){
 						e = ee[i];
 						if (/2013-20\d\d/.test(e.innerText)){
@@ -201,13 +227,13 @@ var site_data = {
 					}
 				}
 				e2move.push(chord);
-				if (e = document.querySelector('div.card.card-body.bg-light.p-2 > div > div > h1')){
+				if (e = d.querySelector('div.card.card-body.bg-light.p-2 > div > div > h1')){
 					e2move.push(e.parentElement);
 				}
 				for (var i = 0 ; i < e2move.length ; i++){
-					document.body.insertBefore(e2move[i], document.body.firstChild);
+					d.body.insertBefore(e2move[i], d.body.firstChild);
 				}
-				hide_elder(e2move[0]);
+				remove_elder(e2move[0]);
 			}
 			insert_stylesheet(
 				"@media print{"
@@ -221,20 +247,20 @@ var site_data = {
 		}
 	},
 	"ja.chordwiki.org": {
-		"event": ["copy"],
+		"event": ["copy scroll touchmove"],
 		"PrintRules": [],
 		"formatPage": function(){
-			var e, i, e2move = [];
-			if (e = document.querySelector("div.footer")){
+			var d = document, e, i, e2move = [];
+			if (e = d.querySelector("div.footer")){
 				e2move.push(e);
 			}
-			e = document.querySelector('div.main');
+			e = d.querySelector('div.main');
 			if (e){
 				e2move.push(e);
 				for (var i = 0 ; i < e2move.length ; i++){
-					document.body.insertBefore(e2move[i], document.body.firstChild);
+					d.body.insertBefore(e2move[i], d.body.firstChild);
 				}
-				hide_elder(e2move[0]);
+				remove_elder(e2move[0]);
 			}
 			insert_stylesheet(
 				"@media print{"
