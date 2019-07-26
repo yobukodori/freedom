@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         簡潔に！
 // @namespace    http://tampermonkey.net/
-// @version      0.1.3
+// @version      0.1.4
 // @description  下記のコード譜サイトの選択/コピー/右クリック/印刷の禁止を解除し印刷用に簡潔表示する
 // @description  Enable disabled select/copy/right-click/print and fomat the page for printing on some japanese sites.
 // @author       yobukodori
@@ -235,6 +235,7 @@ var site_data = {
 				}
 				remove_elder(e2move[0]);
 				d.body.style.overflow = d.body.style.position = "";
+				d.body.className = "";
 			}
 			insert_stylesheet(
 				"@media print{"
