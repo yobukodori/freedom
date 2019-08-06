@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         自由を！ Enable disabled
 // @namespace    http://tampermonkey.net/
-// @version      0.1.6
+// @version      0.1.7
 // @description  下記のコード譜歌詞サイトの選択/コピー/右クリック/印刷の禁止を解除する
 // @description  Enable disabled select/copy/right-click/print on some japanese sites.
 // @author       yobukodori
@@ -175,7 +175,7 @@ function e2str(e)
 	if (e == null)		// v.0.1.4
 		return "null";	// v.0.1.4
 	var s = e.tagName+(e.id?("#"+e.id):"");
-	var className = e.className && e.className.baseVal ? e.className.baseVal : e.className;//v.0.1.6
+	var className = e.className.baseVal != null ? e.className.baseVal : e.className; //v.0.1.7
 	if (className){
 		var a = className.split(" ");
 		for (var i = 0 ; i < a.length ; i++){
