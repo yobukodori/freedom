@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         簡潔に！
 // @namespace    http://tampermonkey.net/
-// @version      0.1.4
+// @version      0.1.5
 // @description  下記のコード譜サイトの選択/コピー/右クリック/印刷の禁止を解除し印刷用に簡潔表示する
 // @description  Enable disabled select/copy/right-click/print and fomat the page for printing on some japanese sites.
 // @author       yobukodori
@@ -289,7 +289,7 @@ function e2str(e)
 	if (e == null)
 		return "null";
 	var s = e.tagName+(e.id?("#"+e.id):"");
-	var className = e.className && e.className.baseVal ? e.className.baseVal : e.className;
+	var className = e.className.baseVal != null ? e.className.baseVal : e.className;
 	if (className){
 		var a = className.split(" ");
 		for (var i = 0 ; i < a.length ; i++){
