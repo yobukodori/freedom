@@ -8,3 +8,7 @@
 
 J-Total Music、楽器.me、U-フレット、ChordWiki の選択/コピー/右クリック/印刷の禁止を解除しコード譜/タブ譜印刷用にページを簡潔に表示します。  
 ブックマークレットは[こちら](https://yomahigoto.blogspot.com/2017/10/androidfirefox.html)で公開中
+
+## 47news-link-fix.js
+
+47newsの記事へのリンクが２段になっているのを1段（直リンク）にするスクリプト
