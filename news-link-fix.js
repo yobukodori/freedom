@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.1
+ * title: news link fix v.0.1.2
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -90,7 +90,7 @@
 			},
 			fixLink: function(e){
 				'use strict';
-				if (/\/(pickup\/\d+|article\?)/.test(e.href)){
+				if (/\/pickup\/\d+/.test(e.href)){
 					fetch(e.href, {mode:"no-cors"})
 					.then(function(response) {
 						return response.text();
