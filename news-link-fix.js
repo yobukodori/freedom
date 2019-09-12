@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.0
+ * title: news link fix v.0.1.1
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -10,25 +10,6 @@
 		return;
 	window.ybkdrNewsLinkFix = true;
 
-	function mutationsChildListForEach(mutations, callback, opt)
-	{
-		if (opt == null)
-			opt = {};
-		for (let i = 0 ; i < mutations.length ; i++){
-			let m = mutations[i];
-			if (m.type === "childList"){
-				if (opt.addedNodes == null || opt.addedNodes){
-					for (let j = 0 ; j < m.addedNodes.length ; j++)
-						callback(m.addedNodes[j],"added");
-				}
-				if (opt.removedNodes == null || opt.removedNodes){
-					for (let j = 0 ; j < m.removedNodes.length ; j++)
-						callback(m.removedNodes[j],"removed");
-				}
-			}
-		}
-	}
-	
 	function newtab(e)
 	{
 		e.setAttribute("target", "_blank");
