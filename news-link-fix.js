@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.2
+ * title: news link fix v.0.1.3
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -98,6 +98,8 @@
 					.then(function(html) {
 						let sig = /\/pickup\/\d+/.test(e.href) ? 'id="dtlBtn">' : 'class="tpcNews_detailLink">', i = html.indexOf(sig), r;
 						i != -1 && (r = html.substring(i + sig.length, html.indexOf('>', i + sig.length)).match('href="(.+?)"')) && (e.href = r[1]);
+						let parent = e.querySelector('div.topics_item_sub'), src, span;
+						parent && (sig = '<span class="source">') && (i = html.indexOf(sig)) != -1 && (src = html.substring(i + sig.length, html.indexOf('<', i + sig.length))) && (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.innerText = src) && parent.appendChild(span);
 					});			
 				}
 			},
