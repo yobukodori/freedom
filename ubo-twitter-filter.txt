@@ -1,4 +1,4 @@
-! Title: personal twitter filter
+! Title: yobukodori twitter filter
 ! Description: for personal use.
 
 ! primaryColumn のプロモーションを消す 言語依存個別版
