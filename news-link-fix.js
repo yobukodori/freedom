@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.3
+ * title: news link fix v.0.1.4
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -120,6 +120,14 @@
 				else {
 					console.log("ul not found");
 				}
+			}
+		},
+		"jp.mobile.reuters.com": {
+			isTarget: function(e){
+				return true;
+			},
+			postprocess: function(){
+				$("a").each(function(){$(this).off('click')});
 			}
 		},
 	};
