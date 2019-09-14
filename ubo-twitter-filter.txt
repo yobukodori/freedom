@@ -28,10 +28,17 @@ twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[hr
 ||api.twitter.com/*/search/typeahead.json$xmlhttprequest,first-party
 
 ! トレンドの更新をブロック
-!||api.twitter.com/*/guide.json$xmlhttprequest,first-party
+! ||api.twitter.com/*/guide.json$xmlhttprequest,first-party
 
 ! 閲覧に支障がないと思われる余分な通信はブロック
 ||api.twitter.com/*/jot/client_event.json$xmlhttprequest,first-party
 ||api.twitter.com/*/live_pipeline/update_subscriptions$xmlhttprequest,first-party
 ||twitter.com/i/csp_report$xmlhttprequest,first-party
 !||api.twitter.com/*/jot/error_log.json$xmlhttprequest,first-party
+
+!#if env_mobile
+
+! アプリのダウンロードを勧めてくるのを消す（href未確認のため保留）
+! twitter.com##div[data-testid="primaryColumn"] h1[aria-level="1"] + div > div:first-child > div:first-child > div:has(a[href^="https://play.google.com/store/apps/details?id=com.twitter.android"][role="button"])
+
+!#endif
