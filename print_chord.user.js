@@ -1,5 +1,5 @@
 // @name         簡潔に！
-// @version      0.1.6
+// @version      0.1.7
 // @description  下記のコード譜サイトの選択/コピー/右クリック/印刷の禁止を解除し印刷用に簡潔表示する
 // @description  J-Total Music, 楽器.me, U-フレット, ChordWiki
 // @author       yobukodori
@@ -91,6 +91,7 @@
 				tt = d.querySelector("tt");
 				if (tt){
 					if (chord_area = d.querySelector('body table[bgcolor="#F4FAFF"]')){
+						["oncontextmenu","onmousedown"].forEach(attr=>tt.parentElement.removeAttribute(attr));
 						hide_younger(tt);
 						hide_younger(tt.parentElement);
 						hide_younger(tt.parentElement.parentElement);
@@ -250,13 +251,19 @@
 					if (e = chord.querySelector('div > a + img'))
 						hide_element(e.parentElement);
 					e2move.push(chord);
+					ee = chord.querySelectorAll('p[style*="cursor: pointer;"]');
+					for (i = 0 ; i < ee.length ; i++){
+						e = ee[i];
+						e.setAttribute("style", e.getAttribute("style").replace(/cursor: pointer;/,""));
+					}
 					if (e = d.querySelector('div.card.card-body.bg-light.p-2 > div > div > h1')){
 						e2move.push(e.parentElement);
 					}
-					for (var i = 0 ; i < e2move.length ; i++){
+					for (i = 0 ; i < e2move.length ; i++){
 						d.body.insertBefore(e2move[i], d.body.firstChild);
 					}
 					remove_elder(e2move[0]);
+					add_style(d.body, "padding:10px");
 				}
 				insert_stylesheet(
 					"@media print{"
