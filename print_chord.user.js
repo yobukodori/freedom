@@ -1,5 +1,5 @@
 // @name         簡潔に！
-// @version      0.1.7
+// @version      0.1.8
 // @description  下記のコード譜サイトの選択/コピー/右クリック/印刷の禁止を解除し印刷用に簡潔表示する
 // @description  J-Total Music, 楽器.me, U-フレット, ChordWiki
 // @author       yobukodori
@@ -248,8 +248,9 @@
 							}
 						}
 					}
-					if (e = chord.querySelector('div > a + img'))
-						hide_element(e.parentElement);
+					['div > a + img', 'div[style^="float:right"]  > a[target="_blank"]'].forEach(selector=>{
+						(e = chord.querySelector(selector)) && hide_element(e.parentElement);
+					});
 					e2move.push(chord);
 					ee = chord.querySelectorAll('p[style*="cursor: pointer;"]');
 					for (i = 0 ; i < ee.length ; i++){
