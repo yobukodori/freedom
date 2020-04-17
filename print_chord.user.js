@@ -1,5 +1,5 @@
 // @name         簡潔に！
-// @version      0.1.9
+// @version      0.2.0
 // @description  下記のコード譜サイトの選択/コピー/右クリック/印刷の禁止を解除し印刷用に簡潔表示する
 // @description  J-Total Music, 楽器.me, U-フレット, ChordWiki
 // @author       yobukodori
@@ -229,13 +229,22 @@
 				return [];
 			},
 			"formatPage": function(){
-				var d = document, chord, e, ee, i, e2move = [];
+				var d = document, chord, e, ee, i, e2move = [], holdStyle; 
+					rules = "@media print{body{display:block!important}}";
 				if (chord = d.querySelector('#original_box > div')){
 					if (e = chord.querySelector('#blyodnijb'))
 						chord = e;
+					rules += "p.atfolhyds{margin-top:-20px!important;padding-top:10px!important;} span.krijcheug{line-height:20px!important}";
+				}
+				else if ((chord = d.querySelector('div[onclick="autoscroll()"]')) && chord.querySelector("p.chord")){
+					rules += "p.atfolhyds{margin-top:-20px!important;padding-top:10px!important;} span.krijcheug{line-height:20px!important}";
+				}
+				else if ((chord = d.querySelector('#my-chord-data')) && chord.querySelector("p.chord")){
+					holdStyle = true;
+					rules += ".musical-sheet > .row{margin-bottom:-16px;}"
+						+"p.chord.no-chord > .mejiowvnz{margin-bottom:-20px}";
 				}
 				else {
-					chord = d.querySelector('div[onclick="autoscroll()"]');
 				}
 				if (chord){
 					if (ee = d.querySelectorAll('div.card.card-body.bg-light.p-2 > p')){
@@ -251,6 +260,11 @@
 					['div > a + img', 'div[style^="float:right"]  > a[target="_blank"]'].forEach(selector=>{
 						(e = chord.querySelector(selector)) && hide_element(e.parentElement);
 					});
+					if (ee = chord.querySelectorAll('div.row-action')){
+						for (i = 0 ; i < ee.length ; i++){
+							hide_element(ee[i]);
+						}
+					}
 					e2move.push(chord);
 					ee = chord.querySelectorAll('p[style*="cursor: pointer;"]');
 					for (i = 0 ; i < ee.length ; i++){
@@ -260,21 +274,21 @@
 					if (e = d.querySelector('div.card.card-body.bg-light.p-2 > div > div > h1')){
 						e2move.push(e.parentElement);
 					}
+					if (holdStyle){
+						ee = d.body.querySelectorAll('style');
+						for (i = ee.length - 1 ; i >= 0 ; i--){
+							if (! /(@media\s+print)/.test(ee[i].textContent)){
+								e2move.push(ee[i]);
+							}
+						}
+					}
 					for (i = 0 ; i < e2move.length ; i++){
 						d.body.insertBefore(e2move[i], d.body.firstChild);
 					}
 					remove_elder(e2move[0]);
 					add_style(d.body, "padding:10px");
 				}
-				insert_stylesheet(
-					"@media print{"
-						+ "body{display:block!important}"
-					+ "}"
-					+ "p.atfolhyds{"
-						+ "margin-top:-20px!important;padding-top:10px!important;"
-					+ "}"
-					+ "span.krijcheug{line-height:20px!important}"
-					);
+				insert_stylesheet(rules);
 			}
 		},
 		"ja.chordwiki.org": {
