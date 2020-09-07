@@ -9,9 +9,3 @@
 J-Total Music、楽器.me、U-フレット、ChordWiki の選択/コピー/右クリック/印刷の禁止を解除しコード譜/タブ譜印刷用にページを簡潔に表示します。  
 ブックマークレットは[こちら](https://yomahigoto.blogspot.com/2017/10/androidfirefox.html)で公開中
 
-## ubo-bookmarklet-menu-resource.txt
-
-Android版Firefox 79+ (Fenix) にユーザースクリプト（ブックマークレット）実行環境を作るublock origin用ユーザーリソース。  
-作成した背景やごくいい加減な使い方の説明は[こちら](https://yomahigoto.blogspot.com/2020/09/android-firefox-79-fenix.html)  
-
-
