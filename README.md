@@ -11,7 +11,9 @@ J-Total Music、楽器.me、U-フレット、ChordWiki の選択/コピー/右�
 
 ## ubo-bookmarklet-menu-resource.txt
 
-Android版Firefox 79+ (Fenix) にユーザースクリプト（ブックマークレット）実行環境を作るublock origin用ユーザーリソース。  
-作成した背景やごくいい加減な使い方の説明は[こちら](https://yomahigoto.blogspot.com/2020/09/android-firefox-79-fenix.html)
+Android版Firefox 79+ (Fenix) にユーザースクリプト（ブックマークレット）実行環境を作るublock origin用ユーザーリソース。 
+<!--  
+作成した背景やごくいい加減な使い方の説明は[こちら](https://yomahigoto.blogspot.com/2020/09/android-firefox-79-fenix.html)  
+-->
 
 
