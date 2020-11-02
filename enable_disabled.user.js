@@ -1,5 +1,5 @@
 // @name         自由を！ Enable disabled
-// @version      0.1.8
+// @version      0.1.9
 // @description  コード譜歌詞サイトの選択/コピー/右クリック/印刷の禁止を解除する
 // @description  Enable disabled select/copy/right-click/print on some japanese sites.
 // @author       yobukodori
@@ -414,6 +414,33 @@
 					expose_element(e[j]);
 				}
 			}
+		}
+		else {
+			let ee = [];
+			document.querySelectorAll('[style*="absolute"').forEach(e=>{
+				if (e.style.position === "absolute"){
+					ee.push(e);
+				}
+			});
+			ee.forEach(e=>{
+				let r1 = e.getBoundingClientRect();
+				if (r1.width > 0){
+					console.log("## absolute!",e2str(e.parentElement),">",e2str(e),"style:", e.getAttribute("style"))
+					let covered = 0;
+					for (let i = 0 ; i < e.parentElement.children.length ; i++){
+						let e2 = e.parentElement.children[i], r2 = e2.getBoundingClientRect();
+						if (e2 !== e){
+							if (!(r2.left < r1.left || r2.right > r1.right || r2.top < r1.top || r2.bottom > r1.bottom)){
+								console.log("## covered!",e2str(e.parentElement),">",e2str(e))
+								++covered;
+							}
+						}
+					}
+					if (covered > 0 && covered === e.parentElement.children.length - 1){
+						e.style.display = "none";
+					}
+				}
+			});
 		}
 
 		if (sd && (sa = sd.hide)){
