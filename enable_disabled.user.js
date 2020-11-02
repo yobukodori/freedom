@@ -1,5 +1,5 @@
 // @name         自由を！ Enable disabled
-// @version      0.1.9
+// @version      0.2.0
 // @description  コード譜歌詞サイトの選択/コピー/右クリック/印刷の禁止を解除する
 // @description  Enable disabled select/copy/right-click/print on some japanese sites.
 // @author       yobukodori
@@ -39,6 +39,8 @@
 				var ss = document.styleSheets;
 				for(var  i = 0 ; i < ss.length ; i++){
 					var s = ss[i], prefix = "document.styleSheets[" + i + "]", m = "";
+					if (s.href)
+						continue;
 					try {
 						if (s.media && s.media.length > 0 && s.media.mediaText) {
 							m = s.media.mediaText;
