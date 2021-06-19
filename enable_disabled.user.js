@@ -1,5 +1,5 @@
 // @name         自由を！ Enable disabled
-// @version      0.2.1
+// @version      0.2.2
 // @description  コード譜歌詞サイトの選択/コピー/右クリック/印刷の禁止を解除する
 // @description  Enable disabled select/copy/right-click/print on some japanese sites.
 // @author       yobukodori
@@ -223,7 +223,7 @@
 		for(var i = 0 ; i < prop.length ; i++){
 			//cssでe{-moz-user-select:none}と設定してもe.style["-moz-user-select"]は初期値""のまま
 			var pr = prop[i];
-			if (e.style[pr] && e.style[pr] != "text"){
+			if (e.style[pr] != null && e.style[pr] != "text"){
 				if (! if_val_is_none || (e.style[prop[i]] && e.style[prop[i]] == "none")){
 					var s = '("'+e2str(e)+'").style["'+pr+'"]: "' + e.style[pr] + '" -> "text"';
 					e.style[pr] = "text";
