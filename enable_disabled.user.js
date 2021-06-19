@@ -1,5 +1,5 @@
 // @name         自由を！ Enable disabled
-// @version      0.2.0
+// @version      0.2.1
 // @description  コード譜歌詞サイトの選択/コピー/右クリック/印刷の禁止を解除する
 // @description  Enable disabled select/copy/right-click/print on some japanese sites.
 // @author       yobukodori
@@ -143,6 +143,26 @@
 				return a;
 			}
 		},
+		"sp-m.mu-mo.net": {
+			more: function(){
+				if (LyricText === "null"){
+					throw Error("LyricTextに歌詞がありません");
+				}
+				let canvas = document.getElementById("canvas");
+				if (! canvas){
+					throw Error("#canvasがありません");
+				}
+				let div = document.createElement("div");
+				div.setAttribute("style", "font-size:16px");
+				LyricText.replace(/[\r\n]+/g, "\n").replace(/\t/g, "    ")
+				.split("\n").forEach(line=>{
+					div.appendChild(document.createTextNode(line));
+					div.appendChild(document.createElement("br"));
+				});
+				canvas.parentElement.insertBefore(div, canvas);
+				canvas.style.display = "none";
+			}
+		},
 		"template": {
 			"event": [],
 			"nonSelectable": [],
@@ -152,6 +172,20 @@
 		}
 	};
 
+	function inform(msg){
+		let div = document.createElement("div");
+		div.setAttribute("style", "position:fixed; top:50%; left:50%; transform: translate(-50%,-50%); padding:0.5em 1em; font-size:large; background-color:#ffff88; border:solid; z-index:2147483647");
+		div.addEventListener("click", ev=> div.remove());
+		document.addEventListener("click", ev => div.remove());
+		div.appendChild(document.createTextNode(msg));
+		let from = document.createElement("div");
+		from.setAttribute("style", "text-align:right; font-size:small");
+		from.style.fontSize = "small";
+		from.appendChild(document.createTextNode("（自由を!）"));
+		div.appendChild(from);
+		document.body.appendChild(div);
+	}
+	
 	function e2str(e)
 	{
 		if (e == null)		// v.0.1.4
@@ -185,15 +219,15 @@
 	function enable_css_user_select(e, if_val_is_none)
 	{
 		//-webkit-touch-callout:none -> default
-		var prop = ["-moz-user-select", "-webkit-user-select", "-ms-user-select", "user-select"];
+		var prop = ["user-select", "-moz-user-select", "-webkit-user-select", "-ms-user-select"];
 		for(var i = 0 ; i < prop.length ; i++){
 			//cssでe{-moz-user-select:none}と設定してもe.style["-moz-user-select"]は初期値""のまま
 			var pr = prop[i];
-			if (e.style[pr] != null){
+			if (e.style[pr] && e.style[pr] != "text"){
 				if (! if_val_is_none || (e.style[prop[i]] && e.style[prop[i]] == "none")){
 					var s = '("'+e2str(e)+'").style["'+pr+'"]: "' + e.style[pr] + '" -> "text"';
-					console.log(s);
 					e.style[pr] = "text";
+					console.log(s);
 				}
 			}
 		}
@@ -274,24 +308,39 @@
 
 	function traverse_css_and_enable_user_select() // v.0.1.4
 	{
-		var prop = ["-moz-user-select", "-webkit-user-select", "-ms-user-select", "user-select"];
+		var prop = ["user-select", "-moz-user-select", "-webkit-user-select", "-ms-user-select"], rex = [];
+		prop.forEach(pr=>{
+			rex.push(new RegExp("[{;\\s]" + pr + "\\s*:\\s*\\w+\\s*!important"));
+		});
 		traverse_css(function(rule, indent, prefix){
 			var r = rule, pfx = prefix, s;
 			for(var i = 0 ; i < prop.length ; i++){
 				var pr = prop[i], v = r.style[pr], s;
 				if (v != null){
 					if (v == "none"){
-						s = indent + "## " + pfx + ":\n  " + indent + r.selectorText + " {" + pr +": none}";
+						var important = rex[i].test(rule.cssText);
+						var fixCursor = ["default","none"].indexOf(r.style["cursor"]) != -1;
+						s = indent + "## " + pfx + ":\n  " + indent + r.selectorText + " {" + pr +": none" +(important ? " !important":"")+(fixCursor ? "; cursor: " + r.style["cursor"] : "") + "}";
 						console.log(s);
 						var es = document.querySelectorAll(r.selectorText);
 						for (var j = 0 ; j < es.length ; j++){
 							var e = es[j], ev = e.style[pr];
 							s = indent+"  ## "+(j+1)+") ("+e2str(e)+').style["'+pr+'"]: "' + ev + '"';
 							if (!(ev && ev == "text")){
-								s += ' -> "text"';
-								e.style[pr] = "text";
+								if (important){
+									s += ' -> "text !important"';
+									e.style.cssText = e.style.cssText + "; " + pr +":text !important";
+								}
+								else {
+									s += ' -> "text"';
+									e.style[pr] = "text";
+								}
+								if (fixCursor){
+									s += ' & style.cursor:' + e.style.cursor + ' -> auto';
+									e.style.cursor = "auto";
+								}
+								console.log(s);
 							}
-							console.log(s);
 						}
 					}
 				}
@@ -480,5 +529,10 @@
 		console.log("# end #");
 	}
 	
-	main();
+	try { 
+		main();
+	}
+	catch (err){
+		inform("エラー: "+err.message);
+	};
 })();
